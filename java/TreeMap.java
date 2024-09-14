@@ -11,8 +11,8 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Tre
 
     public static void main(String[] args) {
         TreeMap<Integer, String> tree = new TreeMap<>();
-        tree.add(3, "Hello");
-        tree.add(1, ", ");
+        tree.add(1, "Hello");
+        tree.add(3, ", ");
         tree.add(6, "World");
         tree.add(7, "!");
 
@@ -44,6 +44,17 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Tre
         System.out.println();
         var dontNeedTrim = tree.filterByValues(s -> s.equals(s.trim()));
         dontNeedTrim.each(entry -> System.out.println("Key := " + entry.key + "\tValue := '" + entry.value + "'"));
+
+        System.out.println();
+        TreeMap<Integer, String> other = new TreeMap<>();
+        other.add(6, "Whatever");
+        other.add(5, "CyberWorld");
+
+        TreeMap<Integer, String> symDiff = tree.symmetricalDifference(other);
+        for(var entry : symDiff) {
+            System.out.print(entry.value);
+        }
+        System.out.println();
     }
 
     public static class Entry<_K, _V> {
@@ -257,10 +268,21 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Tre
     }
 
     // ask Faella
-    // public TreeMap<K, V> symmetricalDifference(TreeMap<? extends K, ? extends V> other) {
-    //     var intersection = intersect(other);
-    //     return union(other).difference(intersection);
-    // }
+    public TreeMap<K, V> symmetricalDifference(TreeMap<K, ? extends V> other) {
+        TreeMap<K, V> symDiff = new TreeMap<K, V>();
+        for (var entry : this) {
+            if (!other.contains(entry.key)) {
+                symDiff.add(entry.key, entry.value);
+            }
+        }
+        for (var entry : other) {
+            if(!contains(entry.key)) {
+                symDiff.add(entry.key, entry.value);
+            }
+        }
+
+        return symDiff;
+    }
 
     public <U> TreeMap<K, U> map(Function<? super V, ? extends U> f) {
         TreeMap<K, U> mapped = new TreeMap<>();
