@@ -6,5 +6,6 @@ Too often I hear "don't reinvent the wheel", well..., I decided to don't listen 
 + [X] ArrayList in java
 + [X] HashSet in java
 + [X] Stack in java
++ [X] TreeMap in java
 * Note
 + Holy shit I always forget that there is no test suit built in java
