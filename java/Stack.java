@@ -4,6 +4,12 @@ public class Stack<T> {
     private Object[] array = new Object[DEFAULT_SIZE];
     private int index = 0, cap = DEFAULT_SIZE;
 
+    public Stack(T el) {
+        push(el);
+    }
+
+    public Stack() {}
+
     @SuppressWarnings("unchecked")
     private void growth() {
         var old = array;
