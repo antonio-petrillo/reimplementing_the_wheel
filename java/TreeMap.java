@@ -16,36 +16,43 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Tre
         tree.add(6, "World");
         tree.add(7, "!");
 
+        System.out.println("In order visit on tree");
         for(var entry : tree) {
             System.out.print(entry.value);
         }
         System.out.println();
 
+        System.out.println("Pre order visit on tree");
         for(var entry : tree.preOrderIterator()) {
             System.out.print(entry.value);
         }
         System.out.println();
 
+        System.out.println("Post order visit on tree");
         for(var entry : tree.postOrderIterator()) {
             System.out.print(entry.value);
         }
         System.out.println();
 
+        System.out.println("Consuming tree elements with 'each' method + lambda function");
         tree.each(entry -> System.out.println("Key := " + entry.key + "\tValue := '" + entry.value + "'"));
-
         System.out.println();
+
+        System.out.println("Trygin the 'map' function");
         TreeMap<Integer, Integer> treeLen = tree.map(s -> s.length());
         treeLen.each(entry -> System.out.println("Key := " + entry.key + "\tValue := " + entry.value));
 
-        System.out.println();
+        System.out.println("Trying the 'reduce' function");
         var stringLenSum = treeLen.reduce((entry, acc) -> acc + entry.value, Integer.valueOf(0));
         System.out.println("The sum of all str lengths is := " + stringLenSum);
-
         System.out.println();
+
+        System.out.println("Trying the 'filterByValue' function");
         var dontNeedTrim = tree.filterByValues(s -> s.equals(s.trim()));
         dontNeedTrim.each(entry -> System.out.println("Key := " + entry.key + "\tValue := '" + entry.value + "'"));
-
         System.out.println();
+
+        System.out.println("Trying the 'symmetricalDifference' function");
         TreeMap<Integer, String> other = new TreeMap<>();
         other.add(6, "Whatever");
         other.add(5, "CyberWorld");
@@ -169,7 +176,6 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Tre
                     public boolean hasNext() {
                         return !stack.isEmpty();
                     }
-
 
                     @Override
                     public Entry<K, V> next() {
