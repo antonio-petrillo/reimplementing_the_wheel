@@ -1,0 +1,8 @@
+#+title: Reimplement the wheel
+
+Too often I hear "don't reimplement the wheel", wheel I decided to don't listen to them.
+
+* Data Structure
++ [X] ArrayList in java
+* Note
++ Holy shit I always forget that there is no test suit built in java
