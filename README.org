@@ -8,7 +8,7 @@ Too often I hear "don't reinvent the wheel", well..., I decided to don't listen 
 + [X] HashSet
 + [X] Stack
 + [X] TreeMap
-+ [ ] Queue
++ [X] Queue
 + [ ] RedBlack Tree
 + [ ] AVL Tree
 + [ ] Trie
