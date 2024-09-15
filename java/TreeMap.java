@@ -4,7 +4,7 @@ import java.util.function.Predicate;
 import java.util.function.Consumer;
 import java.util.Iterator;
 
-public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<TreeMap.Entry<K, V>> {
+public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Entry<K, V>> {
 
     private Node<K, V> root = null;
     private int size = 0;
@@ -18,38 +18,38 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Tre
 
         System.out.println("In order visit on tree");
         for(var entry : tree) {
-            System.out.print(entry.value);
+            System.out.print(entry.getValue());
         }
         System.out.println();
 
         System.out.println("Pre order visit on tree");
         for(var entry : tree.preOrderIterator()) {
-            System.out.print(entry.value);
+            System.out.print(entry.getValue());
         }
         System.out.println();
 
         System.out.println("Post order visit on tree");
         for(var entry : tree.postOrderIterator()) {
-            System.out.print(entry.value);
+            System.out.print(entry.getValue());
         }
         System.out.println();
 
         System.out.println("Consuming tree elements with 'each' method + lambda function");
-        tree.each(entry -> System.out.println("Key := " + entry.key + "\tValue := '" + entry.value + "'"));
+        tree.each(entry -> System.out.println("Key := " + entry.getKey() + "\tValue := '" + entry.getValue() + "'"));
         System.out.println();
 
         System.out.println("Trygin the 'map' function");
         TreeMap<Integer, Integer> treeLen = tree.map(s -> s.length());
-        treeLen.each(entry -> System.out.println("Key := " + entry.key + "\tValue := " + entry.value));
+        treeLen.each(entry -> System.out.println("Key := " + entry.getKey() + "\tValue := " + entry.getValue()));
 
         System.out.println("Trying the 'reduce' function");
-        var stringLenSum = treeLen.reduce((entry, acc) -> acc + entry.value, Integer.valueOf(0));
+        var stringLenSum = treeLen.reduce((entry, acc) -> acc + entry.getValue(), Integer.valueOf(0));
         System.out.println("The sum of all str lengths is := " + stringLenSum);
         System.out.println();
 
         System.out.println("Trying the 'filterByValue' function");
         var dontNeedTrim = tree.filterByValues(s -> s.equals(s.trim()));
-        dontNeedTrim.each(entry -> System.out.println("Key := " + entry.key + "\tValue := '" + entry.value + "'"));
+        dontNeedTrim.each(entry -> System.out.println("Key := " + entry.getKey() + "\tValue := '" + entry.getValue() + "'"));
         System.out.println();
 
         System.out.println("Trying the 'symmetricalDifference' function");
@@ -59,33 +59,15 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Tre
 
         TreeMap<Integer, String> symDiff = tree.symmetricalDifference(other);
         for(var entry : symDiff) {
-            System.out.print(entry.value);
+            System.out.print(entry.getValue());
         }
         System.out.println();
     }
 
-    public static class Entry<_K, _V> {
-        private _K key;
-        private _V value;
-
-        public Entry(_K key, _V value) {
-            this.key = key;
-            this.value = value;
-        }
-
-        public _K getKey() {
-            return key;
-        }
-
-        public _V getValue() {
-            return value;
-        }
-    }
-
-    private static class Node<__K extends Comparable<? super __K>, __V> {
-        Entry<__K, __V> entry;
-        Node<__K, __V> left, right;
-        public Node(__K key, __V value) {
+    private static class Node<_K extends Comparable<? super _K>, _V> {
+        Entry<_K, _V> entry;
+        Node<_K, _V> left, right;
+        public Node(_K key, _V value) {
             entry = new Entry<>(key, value);
         }
     }
@@ -201,7 +183,7 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Tre
 
         var iter = root;
         while(true) {
-            int compare = iter.entry.key.compareTo(key);
+            int compare = iter.entry.getKey().compareTo(key);
             if (compare > 0) {
                 if (iter.left == null) {
                     iter.left = new Node<>(key, value);
@@ -230,7 +212,7 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Tre
         }
         var iter = root;
         while(iter != null) {
-            int compare = iter.entry.key.compareTo(key);
+            int compare = iter.entry.getKey().compareTo(key);
             if (compare > 0) {
                 iter = iter.left;
             } else if (compare < 0) {
@@ -245,8 +227,8 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Tre
     public TreeMap<K, V> intersect(TreeMap<? super K, ?> other) {
         TreeMap<K, V> intersection = new TreeMap<>();
         for(Entry<K, V> entry : this){
-            if(other.contains(entry.key)) {
-                intersection.add(entry.key, entry.value);
+            if(other.contains(entry.getKey())) {
+                intersection.add(entry.getKey(), entry.getValue());
             }
         }
         return intersection;
@@ -255,10 +237,10 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Tre
     public TreeMap<K, V> union(TreeMap<? extends K, ? extends V> other) {
         TreeMap<K, V> unions = new TreeMap<>();
         for(Entry<K, V> entry : this){
-            unions.add(entry.key, entry.value);
+            unions.add(entry.getKey(), entry.getValue());
         }
         for(Entry<? extends K, ? extends V> entry : other){
-            unions.add(entry.key, entry.value);
+            unions.add(entry.getKey(), entry.getValue());
         }
         return unions;
     }
@@ -266,8 +248,8 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Tre
     public TreeMap<K, V> difference(TreeMap<? super K, ?> other) {
         TreeMap<K, V> differences = new TreeMap<>();
         for (Entry<K, V> entry : this) {
-            if(!other.contains(entry.key)) {
-                differences.add(entry.key, entry.value);
+            if(!other.contains(entry.getKey())) {
+                differences.add(entry.getKey(), entry.getValue());
             }
         }
         return differences;
@@ -278,13 +260,13 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Tre
     public TreeMap<K, V> symmetricalDifference(TreeMap<K, ? extends V> other) {
         TreeMap<K, V> symDiff = new TreeMap<K, V>();
         for (var entry : this) {
-            if (!other.contains(entry.key)) {
-                symDiff.add(entry.key, entry.value);
+            if (!other.contains(entry.getKey())) {
+                symDiff.add(entry.getKey(), entry.getValue());
             }
         }
         for (var entry : other) {
-            if(!contains(entry.key)) {
-                symDiff.add(entry.key, entry.value);
+            if(!contains(entry.getKey())) {
+                symDiff.add(entry.getKey(), entry.getValue());
             }
         }
 
@@ -294,7 +276,7 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Tre
     public <U> TreeMap<K, U> map(Function<? super V, ? extends U> f) {
         TreeMap<K, U> mapped = new TreeMap<>();
         for (Entry<K, V> entry : this) {
-            mapped.add(entry.key, f.apply(entry.value));
+            mapped.add(entry.getKey(), f.apply(entry.getValue()));
         }
         return mapped;
     }
@@ -302,7 +284,7 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Tre
     public <Z extends Comparable<? super Z>> TreeMap<Z, V> mapKeys(Function<? super K, ? extends Z> f) {
         TreeMap<Z, V> mapped = new TreeMap<>();
         for (Entry<K, V> entry : this) {
-            mapped.add(f.apply(entry.key), entry.value);
+            mapped.add(f.apply(entry.getKey()), entry.getValue());
         }
         return mapped;
     }
@@ -310,7 +292,7 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Tre
     public <Z extends Comparable<? super Z>, T> TreeMap<Z, T> mapBoth(Function<? super K, ? extends Z> fnKey, Function<? super V, ? extends T> fnValue) {
        TreeMap<Z, T> mapped = new TreeMap<>();
        for (Entry<K, V> entry : this) {
-           mapped.add(fnKey.apply(entry.key), fnValue.apply(entry.value));
+           mapped.add(fnKey.apply(entry.getKey()), fnValue.apply(entry.getValue()));
        }
        return mapped;
     }
@@ -318,8 +300,8 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Tre
     public TreeMap<K, V> filterByKeys(Predicate<? super K> p) {
         TreeMap<K, V> filtered = new TreeMap<>();
         for (Entry<K, V> entry : this) {
-            if(p.test(entry.key)) {
-                filtered.add(entry.key, entry.value);
+            if(p.test(entry.getKey())) {
+                filtered.add(entry.getKey(), entry.getValue());
             }
         }
         return filtered;
@@ -328,8 +310,8 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Tre
     public TreeMap<K, V> filterByValues(Predicate<? super V> p) {
         TreeMap<K, V> filtered = new TreeMap<>();
         for (Entry<K, V> entry : this) {
-            if(p.test(entry.value)) {
-                filtered.add(entry.key, entry.value);
+            if(p.test(entry.getValue())) {
+                filtered.add(entry.getKey(), entry.getValue());
             }
         }
         return filtered;
