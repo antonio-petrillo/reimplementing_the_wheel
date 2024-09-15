@@ -9,11 +9,12 @@ Too often I hear "don't reinvent the wheel", well..., I decided to don't listen 
 + [X] Stack
 + [X] TreeMap
 + [X] Queue
-+ [ ] RedBlack Tree
 + [ ] AVL Tree
++ [ ] RedBlack Tree
 + [ ] Trie
 + [ ] Heap
 + [ ] Immutable List
++ [ ] Immutable Stack
 + [ ] Immutable Efficient Queue
 + [ ] Union Find
 
