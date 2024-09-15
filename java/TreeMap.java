@@ -274,6 +274,7 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Tre
     }
 
     // ask Faella
+    // Can't generalize TreeMap K any further, I need both '? super' and '? extends' hence I'm stuck with only K
     public TreeMap<K, V> symmetricalDifference(TreeMap<K, ? extends V> other) {
         TreeMap<K, V> symDiff = new TreeMap<K, V>();
         for (var entry : this) {
@@ -296,6 +297,22 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Tre
             mapped.add(entry.key, f.apply(entry.value));
         }
         return mapped;
+    }
+
+    public <Z extends Comparable<? super Z>> TreeMap<Z, V> mapKeys(Function<? super K, ? extends Z> f) {
+        TreeMap<Z, V> mapped = new TreeMap<>();
+        for (Entry<K, V> entry : this) {
+            mapped.add(f.apply(entry.key), entry.value);
+        }
+        return mapped;
+    }
+
+    public <Z extends Comparable<? super Z>, T> TreeMap<Z, T> mapBoth(Function<? super K, ? extends Z> fnKey, Function<? super V, ? extends T> fnValue) {
+       TreeMap<Z, T> mapped = new TreeMap<>();
+       for (Entry<K, V> entry : this) {
+           mapped.add(fnKey.apply(entry.key), fnValue.apply(entry.value));
+       }
+       return mapped;
     }
 
     public TreeMap<K, V> filterByKeys(Predicate<? super K> p) {
@@ -325,7 +342,7 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Tre
         return initial;
     }
 
-    public void each(Consumer<Entry<? super K, ? extends V>> consumer) {
+    public void each(Consumer<? super Entry<? extends K, ? extends V>> consumer) {
         for(Entry<K, V> entry : this) {
             consumer.accept(entry);
         }
