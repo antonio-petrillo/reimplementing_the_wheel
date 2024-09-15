@@ -7,7 +7,7 @@ import java.util.Iterator;
 public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Entry<K, V>> {
 
     private Node<K, V> root = null;
-    private int size = 0;
+    private int len = 0;
 
     public static void main(String[] args) {
         TreeMap<Integer, String> tree = new TreeMap<>();
@@ -62,6 +62,17 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Ent
             System.out.print(entry.getValue());
         }
         System.out.println();
+
+        System.out.println("Trying the 'remove' method");
+        TreeMap<Integer, String> copy = tree.map(s -> s);
+        System.out.println("Pre remove");
+        copy.each(entry -> System.out.println("Key := " + entry.getKey() + "\tValue := " + entry.getValue()));
+        System.out.println("Post remove");
+        copy.remove(6);
+        copy.each(entry -> System.out.println("Key := " + entry.getKey() + "\tValue := " + entry.getValue()));
+        System.out.println("Post remove root");
+        copy.remove(1);
+        copy.each(entry -> System.out.println("Key := " + entry.getKey() + "\tValue := " + entry.getValue()));
     }
 
     private static class Node<_K extends Comparable<? super _K>, _V> {
@@ -178,6 +189,7 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Ent
     public boolean add(K key, V value) {
         if (root == null) {
             root = new Node<K, V>(key, value);
+            len++;
             return true;
         }
 
@@ -186,13 +198,17 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Ent
             int compare = iter.entry.getKey().compareTo(key);
             if (compare > 0) {
                 if (iter.left == null) {
+                    len++;
                     iter.left = new Node<>(key, value);
+                    return true;
                 } else {
                     iter = iter.left;
                 }
             } else if (compare < 0) {
                 if (iter.right == null) {
+                    len++;
                     iter.right = new Node<>(key, value);
+                    return true;
                 } else {
                     iter = iter.right;
                 }
@@ -203,7 +219,65 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Ent
     }
 
     public boolean remove(K key) {
-        return false;
+        if(root == null) {
+            return false;
+        }
+
+        boolean isRemoved = false;
+        Node<K, V> iter = root, parent = null;
+        while(iter != null) {
+            int compare = iter.entry.getKey().compareTo(key);
+            if (compare > 0) {
+                parent = iter;
+                iter = iter.left;
+            } else if (compare < 0) {
+                parent = iter;
+                iter = iter.right;
+            } else {
+                break;
+            }
+        }
+
+        if (iter != null) {
+            len--;
+            isRemoved = true;
+            if (parent == null) {
+                root = deleteRoot(root);
+            } else if (iter == parent.left) {
+                parent.left = deleteRoot(iter);
+            } else {
+                parent.right = deleteRoot(iter);
+            }
+        }
+
+        return isRemoved;
+    }
+
+    private Node<K, V> deleteRoot(Node<K, V> root) {
+        if (root.left == null) {
+            return root.right;
+        } else if (root.right == null) {
+            return root.left;
+        } else {
+            Node<K, V> minimum = minDeconnection(root, root.right);
+            minimum.left = root.left;
+            minimum.right = root.right;
+            return minimum;
+        }
+    }
+
+    private Node<K, V> minDeconnection(Node<K, V> parent, Node<K, V> child) {
+        if(child.left == null) {
+            parent.right = child.right;
+            return child;
+        }
+
+        while(child.left != null) {
+            child = child.left;
+            parent = parent.left;
+        }
+        parent.left = child.right;
+        return child;
     }
 
     public boolean contains(K key) {
