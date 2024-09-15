@@ -22,6 +22,12 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Ent
         }
         System.out.println();
 
+        System.out.println("Breadth order visit on tree");
+        for(var entry : tree.breadthOrderIterator()) {
+            System.out.print(entry.getValue());
+        }
+        System.out.println();
+
         System.out.println("Pre order visit on tree");
         for(var entry : tree.preOrderIterator()) {
             System.out.print(entry.getValue());
@@ -81,6 +87,10 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Ent
         public Node(_K key, _V value) {
             entry = new Entry<>(key, value);
         }
+    }
+
+    public int size() {
+        return len;
     }
 
     // in order
@@ -180,6 +190,38 @@ public class TreeMap<K extends Comparable<? super K>, V> implements Iterable<Ent
                             stack.push(pop.left);
                         }
                         return pop.entry;
+                    }
+                };
+            }
+        };
+    }
+
+    public Iterable<Entry<K,V>> breadthOrderIterator() {
+        return new Iterable<Entry<K, V>>() {
+            Queue<Node<K, V>> queue = root != null ? new Queue<Node<K,V>>(root) : new Queue<Node<K, V>>();
+
+            @Override
+            public Iterator<Entry<K, V>> iterator() {
+
+                return new Iterator<Entry<K, V>>() {
+
+                    @Override
+                    public boolean hasNext() {
+                        return !queue.isEmpty();
+                    }
+
+                    @Override
+                    public Entry<K, V> next() {
+                        Node<K, V> peek = queue.dequeue();
+
+                        if (peek.left != null) {
+                            queue.enqueue(peek.left);
+                        }
+                        if (peek.right != null) {
+                            queue.enqueue(peek.right);
+                        }
+
+                        return peek.entry;
                     }
                 };
             }

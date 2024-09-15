@@ -8,6 +8,10 @@ public class Queue<T> {
 
     public Queue(){}
 
+    public Queue(T el){
+        enqueue(el);
+    }
+
     public static void main(String[] args) {
         Queue<Integer> q = new Queue<>();
         q.enqueue(1);
