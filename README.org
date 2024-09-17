@@ -9,7 +9,7 @@ Too often I hear "don't reinvent the wheel", well..., I decided to don't listen 
 + [X] Stack
 + [X] TreeMap
 + [X] Queue
-+ [ ] AVL Tree
++ [X] AVL Tree
 + [ ] RedBlack Tree
 + [ ] Trie
 + [ ] Heap
