@@ -120,6 +120,8 @@ public class HashSet<T> implements Iterable<T> {
             if (array[index] == null || array[index] == TOMBSTONE) {
                 array[index] = el;
                 break;
+            } else if (array[index].equals(el)) {
+                return false; // elem already present
             }
         }
         len++;
