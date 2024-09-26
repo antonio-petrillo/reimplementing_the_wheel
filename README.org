@@ -13,12 +13,14 @@ Too often I hear "don't reinvent the wheel", well..., I decided to don't listen 
 + [ ] RedBlack Tree
 + [ ] Trie
 + [ ] Heap
++ [ ] Priority Queue (Fibonacci Heap)
 + [ ] Immutable List
 + [ ] Immutable Stack
 + [ ] Immutable Efficient Queue
 + [ ] Union Find
++ [ ] Huffman Encoding
 
 * Algorithms
 
 * Note
-+ Holy shit I always forget that there is no test suit built in java
++  Holy shit I always forget that java has no builtin testing library
